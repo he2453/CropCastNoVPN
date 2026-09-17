@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.CropCast" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">#000000</item>
+        <item name="colorAccent">#FFFFFF</item>
+    </style>
+</resources>
