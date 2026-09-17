@@ -12,7 +12,6 @@ jobs:
     env:
       ANDROID_COMPILE_SDK: "34"
       ANDROID_BUILD_TOOLS: "34.0.0"
-      ANDROID_PLATFORM_TOOLS_VERSION: "35.0.2"
       ANDROID_CMDLINE_TOOLS: "12266719"
 
     steps:
@@ -38,7 +37,7 @@ jobs:
 
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_CMDLINE_TOOLS}_latest.zip
           unzip -q commandlinetools-linux-${ANDROID_CMDLINE_TOOLS}_latest.zip
-          rm commandlinetools-linux-${ANDROID_CMDLINE_TOOLS}_latest.zip
+          rm -f commandlinetools-linux-${ANDROID_CMDLINE_TOOLS}_latest.zip
           mkdir -p $CMDLINE_TOOLS
           mv cmdline-tools/* $CMDLINE_TOOLS/ 2>/dev/null || true
 
@@ -50,6 +49,8 @@ jobs:
           echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
           echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
           echo "PATH=$CMDLINE_TOOLS/bin:$ANDROID_HOME/platform-tools:$PATH" >> $GITHUB_ENV
+
+          echo "sdk.dir=$ANDROID_HOME" > $GITHUB_WORKSPACE/local.properties
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
