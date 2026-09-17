@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:gravity="center"
     android:padding="24dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <Button
-        android:id="@+id/btn"
-        android:text="@string/start_cast"
-        android:layout_width="match_parent"
+        android:id="@+id/btn_start"
+        android:text="启动/停止 悬浮裁剪"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/tv"
-        android:text="@string/ready"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+
 </LinearLayout>

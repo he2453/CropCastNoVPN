@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="260dp"
+    android:layout_height="180dp"
+    android:background="#33000000">
+
+    <View
+        android:id="@+id/crop_border"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"/>
+
+    <Button
+        android:id="@+id/btn_close"
+        android:text="X"
+        android:layout_gravity="top|end"
+        android:layout_width="36dp"
+        android:layout_height="36dp"/>
+
+</FrameLayout>

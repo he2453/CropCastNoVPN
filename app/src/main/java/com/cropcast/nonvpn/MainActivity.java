@@ -1,37 +1,69 @@
 package com.cropcast.nonvpn;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends Activity {
-    private static final int REQ_CAPTURE = 1001;
-    private TextView tv;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private static final int REQ_OVERLAY = 1001;
+    private Button btnStart;
 
     @Override
-    protected void onCreate(Bundle b) {
-        super.onCreate(b);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tv = findViewById(R.id.tv);
-        Button btn = findViewById(R.id.btn);
-        btn.setOnClickListener(v -> {
-            MediaProjectionManager mpm = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-            startActivityForResult(mpm.createScreenCaptureIntent(), REQ_CAPTURE);
+
+        btnStart = findViewById(R.id.btn_start);
+        updateButtonText();
+
+        btnStart.setOnClickListener(v -> {
+            if (CropService.isRunning) {
+                stopService(new Intent(this, CropService.class));
+                updateButtonText();
+                return;
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName())
+                );
+                startActivityForResult(intent, REQ_OVERLAY);
+                Toast.makeText(this, "请允许悬浮窗权限", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            startActivity(new Intent(this, RequestPermissionActivity.class));
         });
-        tv.setText("CropCastNoVPN skeleton. 下一步：CaptureService + 裁剪 + WebRTC。");
     }
 
     @Override
-    protected void onActivityResult(int req, int res, Intent data) {
-        super.onActivityResult(req, res, data);
-        if (req == REQ_CAPTURE && res == RESULT_OK && data != null) {
-            tv.setText("已获投屏权限，待接入 CaptureService。");
-            // Intent s = new Intent(this, CaptureService.class);
-            // s.putExtra("mp_intent", data);
-            // startForegroundService(s);
+    protected void onResume() {
+        super.onResume();
+        updateButtonText();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_OVERLAY) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(this)) {
+                startActivity(new Intent(this, RequestPermissionActivity.class));
+            } else {
+                Toast.makeText(this, "没有悬浮窗权限，无法启动裁剪悬浮窗", Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+
+    private void updateButtonText() {
+        if (btnStart == null) return;
+        btnStart.setText(CropService.isRunning ? "停止悬浮裁剪" : "启动/停止 悬浮裁剪");
     }
 }
