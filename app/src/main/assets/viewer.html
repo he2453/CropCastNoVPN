@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CropCast Viewer</title>
+<style>body{margin:0;background:#000;overflow:hidden}
+video{width:100vw;height:100vh;object-fit:contain;background:#000}
+#s{position:fixed;left:8px;top:8px;color:#0f0;font:14px monospace;background:rgba(0,0,0,.5);padding:6px}</style>
+</head>
+<body>
+<video id="v" autoplay playsinline></video>
+<div id="s">viewer.html 已加载。信令/WebRTC 待接入。</div>
+<script>
+const v=document.getElementById('v'), s=document.getElementById('s');
+s.textContent='viewer.html 已加载。信令/WebRTC 待接入。';
+</script>
+</body>
+</html>
