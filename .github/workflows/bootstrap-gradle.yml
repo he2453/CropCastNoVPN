@@ -1,0 +1,50 @@
+name: Bootstrap real Gradle Wrapper
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.5
+
+      - name: Generate real wrapper
+        run: |
+          rm -f gradlew
+          gradle wrapper --gradle-version 8.5
+          chmod +x gradlew
+
+      - name: Show wrapper head
+        run: head -5 gradlew
+
+      - name: Commit real gradlew
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add gradlew gradle/wrapper 2>/dev/null || true
+          # 如果之前没有 gradle/wrapper 目录，上面可能没变化；确保追踪
+          git add gradlew
+          git status
+          git diff --cached --quiet || git commit -m "替换占位 gradlew 为真实 Gradle Wrapper 8.5"
+          git push
