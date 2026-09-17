@@ -1,0 +1,32 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.cropcast.nonvpn'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.cropcast.nonvpn"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "0.1-skeleton"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    // WebRTC 后续打开，先注释避免离线/版本问题
+    // implementation 'org.webrtc:google-webrtc:1.0.32006'
+}
